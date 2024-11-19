@@ -17,6 +17,55 @@ class ToiletCellar(Room):
 ## ----------------------------------------------------------------
 ## List here all rooms
 
+class UndergroundLake(Room):
+    def __init__(self, name, description, items=None):
+        super().__init__(name, description, items)
+        self.monsters_awake = False
+        self.treasure_found = False  # New state: Has the player already found the treasure?
+
+    def run_story(self, user_items):
+        print(self.description)
+        while True:
+            action = input("What would you like to do? (enter platform / inspect water / dive / leave): ").strip().lower()
+
+            if action == "enter platform":
+                self.monsters_awake = True
+                print(
+                    "You step onto the platform and pick up the lantern. Suddenly, the water begins to churn, "
+                    "and creatures emerge!"
+                )
+                self.handle_creatures(user_items)
+            elif action == "inspect water":
+                print("You see your reflection... and notice something shimmering in the water!")
+                print("Maybe you should dive?")
+            elif action == "dive":
+                if self.treasure_found:
+                    print("You have already found the treasure. There's nothing else here.")
+                else:
+                    print("You dive into the cold water and start searching...")
+                    if any(item.name == "Mysterious Lantern" for item in user_items):
+                        print("The lantern lights the way. You discover a chest!")
+                        treasure = Item("Golden Necklace", "A shiny necklace made of pure gold.", movable=True)
+                        user_items.append(treasure)
+                        self.treasure_found = True
+                        print("You take the Golden Necklace with you!")
+                    else:
+                        print("Without light, it's too dark to find anything. You swim back up.")
+            elif action == "leave":
+                print("You leave the lake and return to the previous area.")
+                break
+            else:
+                print("That is not a valid action. Please try again.")
+        return user_items
+
+    def handle_creatures(self, user_items):
+        if any(item.name == "Mysterious Lantern" for item in user_items):
+            print("The lantern protects you! The creatures retreat into the darkness.")
+        else:
+            print(
+                "Without the lantern, the creatures attack you! "
+                "You barely escape back to the shore, but you're exhausted."
+            )
 
 class TableTennisRoom(Room):
 
@@ -172,13 +221,18 @@ toilet_cellar = ToiletCellar("toilet", "Yes, even the cellar has a toilet.")
 # Add your room instance here, similar to the example below:
 # my_room = MyRoom("room_name", "room_description")
 
-
+mysterious_lantern = Item("Mysterious Lantern", "A lantern emitting a calming light. It protects against the creatures of the Underground Lake.", movable=True)
+underground_lake = UndergroundLake(
+    "The Underground Lake",
+    "A vast, dark room with a silent lake and a mysterious lantern on a platform.",
+    [mysterious_lantern]
+)
 table_tennis_room = TableTennisRoom("table tennis room", "A room where you can play table tennis.")
 
 ALL_ROOMS = {
     "toilet_cellar": toilet_cellar,
     # Add your room key-value pairs here:
     # "my_room_key": my_room
-
+    "underground_lake":underground_lake,
     "table_tennis_room": table_tennis_room
 }
