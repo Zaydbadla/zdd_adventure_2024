@@ -1,15 +1,15 @@
 name: first python CI
-on : 
+on:
   push:
-    branches:["main"]
-jobs :
+    branches: ["main"]
+jobs:
   basic-tests:
     runs-on: ubuntu-latest 
     steps:
-    -uses: actions/checkout@v4
-    -name: Set up python
-    uses: actions/setup-python@v3
-     with: 
+    - uses: actions/checkout@v4
+    - name: Set up python
+      uses: actions/setup-python@v3
+      with: 
        python-version: 3.12
      
   
