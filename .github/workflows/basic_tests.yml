@@ -4,12 +4,12 @@ on :
     branches:["main"]
 jobs :
   basic-tests:
-   runs-on: windows-latest 
-   steps:
-   -uses: actions/checkout@v4
-   -name: Set up python
-   uses: actions/setup-python@v3
-   with: 
-     python-version: 3.12
+    runs-on: windows-latest 
+    steps:
+    -uses: actions/checkout@v4
+    -name: Set up python
+     uses: actions/setup-python@v3
+     with: 
+       python-version: 3.12
      
   
